@@ -101,15 +101,15 @@ class Test
                 // create a random direction towards sphere
                 // coord system for sampling: sw, su, sv
                 float3 sw = Normalize(s.center - rec.pos);
-                float3 su = Normalize(Cross(MathF.Abs(sw.x) > 0.01f ? new float3(0, 1, 0) : new float3(1, 0, 0), sw));
+                float3 su = Normalize(Cross(Math.Abs(sw.x) > 0.01f ? new float3(0, 1, 0) : new float3(1, 0, 0), sw));
                 float3 sv = Cross(sw, su);
                 // sample sphere by solid angle
-                float cosAMax = MathF.Sqrt(MathF.Max(0.0f, 1.0f - s.radius * s.radius / (rec.pos - s.center).SqLength));
+                float cosAMax = (float) Math.Sqrt(Math.Max(0.0f, 1.0f - s.radius * s.radius / (rec.pos - s.center).SqLength));
                 float eps1 = RandomFloat01(ref state), eps2 = RandomFloat01(ref state);
                 float cosA = 1.0f - eps1 + eps1 * cosAMax;
-                float sinA = MathF.Sqrt(1.0f - cosA * cosA);
+                float sinA = (float)Math.Sqrt(1.0f - cosA * cosA);
                 float phi = 2 * PI * eps2;
-                float3 l = su * MathF.Cos(phi) * sinA + sv * MathF.Sin(phi) * sinA + sw * cosA;
+                float3 l = su * (float) Math.Cos(phi) * sinA + sv * (float) Math.Sin(phi) * sinA + sw * cosA;
                 l.Normalize();
 
                 // shoot shadow ray
@@ -123,7 +123,7 @@ class Test
                     float3 rdir = r_in.dir;
                     Debug.Assert(rdir.IsNormalized);
                     float3 nl = Dot(rec.normal, rdir) < 0 ? rec.normal : -rec.normal;
-                    outLightE += (mat.albedo * s_SphereMats[i].emissive) * (MathF.Max(0.0f, Dot(l, nl)) * omega / PI);
+                    outLightE += (mat.albedo * s_SphereMats[i].emissive) * (Math.Max(0.0f, Dot(l, nl)) * omega / PI);
                 }
             }
 #endif
@@ -236,7 +236,7 @@ class Test
                     col += Trace(r, 0, ref rayCount, ref state);
                 }
                 col *= 1.0f / (float)DO_SAMPLES_PER_PIXEL;
-                col = new float3(MathF.Sqrt(col.x), MathF.Sqrt(col.y), MathF.Sqrt(col.z));
+                col = new float3((float)Math.Sqrt(col.x), (float)Math.Sqrt(col.y), (float)Math.Sqrt(col.z));
 
                 float3 prev = new float3(backbuffer[backbufferIdx + 0], backbuffer[backbufferIdx + 1], backbuffer[backbufferIdx + 2]);
                 col = prev * lerpFac + col * (1 - lerpFac);
@@ -254,8 +254,8 @@ class Test
     {
         int rayCount = 0;
 #if DO_ANIMATE
-        s_Spheres[1].center.y = MathF.Cos(time)+1.0f;
-        s_Spheres[8].center.z = MathF.Sin(time)*0.3f;
+        s_Spheres[1].center.y = Math.Cos(time)+1.0f;
+        s_Spheres[8].center.z = Math.Sin(time)*0.3f;
 #endif
         float3 lookfrom = new float3(0, 2, 3);
         float3 lookat = new float3(0, 0, 0);

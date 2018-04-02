@@ -8,7 +8,7 @@ public struct float3
     public float3(float x_, float y_, float z_) { x = x_; y = y_; z = z_; }
 
     public float SqLength => x * x + y * y + z * z;
-    public float Length => MathF.Sqrt(x * x + y * y + z * z);
+    public float Length => (float)Math.Sqrt(x * x + y * y + z * z);
     public void Normalize() { float k = 1.0f / Length; x *= k; y *= k; z *= k; }
 
     public static float3 operator +(float3 a, float3 b) { return new float3(a.x + b.x, a.y + b.y, a.z + b.z); }
@@ -22,7 +22,7 @@ public struct float3
     public static float3 Cross(float3 a, float3 b) { return new float3(a.y * b.z - a.z * b.y, -(a.x * b.z - a.z * b.x), a.x * b.y - a.y * b.x); }
     public static float3 Normalize(float3 v) { float k = 1.0f / v.Length; return new float3(v.x * k, v.y * k, v.z * k); }
 
-    public bool IsNormalized => MathF.Abs(SqLength - 1.0f) < 0.01f;
+    public bool IsNormalized => Math.Abs(SqLength - 1.0f) < 0.01f;
 
     public static float3 Reflect(float3 v, float3 n)
     {
@@ -37,7 +37,7 @@ public struct float3
         float discr = 1.0f - nint * nint * (1 - dt * dt);
         if (discr > 0)
         {
-            outRefracted = nint * (v - n* dt) - n * MathF.Sqrt(discr);
+		outRefracted = nint * (v - n* dt) - n * (float)Math.Sqrt(discr);
             Debug.Assert(outRefracted.IsNormalized);
             return true;
         }
@@ -54,7 +54,7 @@ public class MathUtil
     {
         float r0 = (1 - ri) / (1 + ri);
         r0 = r0 * r0;
-        return r0 + (1 - r0) * MathF.Pow(1 - cosine, 5);
+        return r0 + (1 - r0) * (float)Math.Pow(1 - cosine, 5);
     }
 
     static uint XorShift32(ref uint state)
@@ -134,7 +134,7 @@ public struct Sphere
         float discr = b * b - c;
         if (discr > 0)
         {
-            float discrSq = MathF.Sqrt(discr);
+		float discrSq = (float) Math.Sqrt(discr);
 
             float t = (-b - discrSq);
             if (t < tMax && t > tMin)
@@ -166,7 +166,7 @@ struct Camera
     {
         lensRadius = aperture / 2;
         float theta = vfov * MathUtil.PI / 180;
-        float halfHeight = MathF.Tan(theta / 2);
+        float halfHeight = (float)Math.Tan(theta / 2);
         float halfWidth = aspect * halfHeight;
         origin = lookFrom;
         w = float3.Normalize(lookFrom - lookAt);

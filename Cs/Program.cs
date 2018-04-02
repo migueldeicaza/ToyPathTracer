@@ -33,9 +33,11 @@ class Program
         byte[] bytes = new byte[backbuffer.Length];
         for (int i = 0; i < backbuffer.Length; i += 4)
         {
+#if false
             bytes[i + 0] = (byte)(System.Math.Clamp(backbuffer[i + 2], 0.0f, 1.0f) * 255.0f);
             bytes[i + 1] = (byte)(System.Math.Clamp(backbuffer[i + 1], 0.0f, 1.0f) * 255.0f);
             bytes[i + 2] = (byte)(System.Math.Clamp(backbuffer[i + 0], 0.0f, 1.0f) * 255.0f);
+#endif
             bytes[i + 3] = 255;
         }
         byte[] header = {
